@@ -1,0 +1,118 @@
+.portfolio-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f4f7f6;
+}
+
+.page-content {
+  flex-grow: 1;
+  padding: 40px 20px;
+  text-align: center;
+  max-width: 1000px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-content h1 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 2.5em;
+}
+
+.page-content p {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.portfolio-summary {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.portfolio-summary h2 {
+  color: #333;
+  font-size: 2em;
+  margin: 0;
+}
+
+.total-value {
+  color: #28a745; /* Green for total value */
+  font-weight: bold;
+}
+
+.owned-stocks-table-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow-x: auto; /* Enable horizontal scrolling on small screens */
+}
+
+.owned-stocks-table-container table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.owned-stocks-table-container th,
+.owned-stocks-table-container td {
+  border: 1px solid #ddd;
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.owned-stocks-table-container th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+  color: #333;
+}
+
+.owned-stocks-table-container tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.owned-stocks-table-container tr:hover {
+  background-color: #e9e9e9;
+}
+
+.positive {
+  color: #28a745; /* Green for positive P/L */
+  font-weight: bold;
+}
+
+.negative {
+  color: #dc3545; /* Red for negative P/L */
+  font-weight: bold;
+}
+
+.no-stocks {
+  color: #777;
+  font-style: italic;
+  margin-top: 30px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .page-content {
+    padding: 20px 15px;
+  }
+
+  .page-content h1 {
+    font-size: 2em;
+  }
+
+  .owned-stocks-table-container {
+    padding: 10px;
+  }
+
+  .owned-stocks-table-container th,
+  .owned-stocks-table-container td {
+    padding: 8px 10px;
+    font-size: 0.9em;
+  }
+}
