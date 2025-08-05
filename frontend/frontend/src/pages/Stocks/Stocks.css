@@ -1,0 +1,110 @@
+.stocks-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f4f7f6;
+}
+
+.page-content {
+  flex-grow: 1;
+  padding: 40px 20px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-content h1 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 2.5em;
+}
+
+.page-content p {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.stock-selection {
+  margin-bottom: 30px;
+  text-align: left;
+}
+
+.stock-selection label {
+  display: block;
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #333;
+}
+
+.stock-selection select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+  background-color: white;
+  appearance: none; /* Remove default dropdown arrow */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007bff%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13.2-6.4H18.4c-6.8%200-13.2%203.6-17.6%206.4-4.4%202.8-6.8%207.2-6.8%2012.8s2.4%2010%206.8%2012.8l128%20128c4.4%204.4%2010.8%206.8%2017.6%206.8s13.2-2.4%2017.6-6.8l128-128c4.4-2.8%206.8-7.2%206.8-12.8s-2.4-10-6.8-12.8z%22%2F%3E%3C%2Fsvg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 12px;
+  cursor: pointer;
+}
+
+.stock-details {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.stock-details h3 {
+  color: #333;
+  margin-top: 0;
+  margin-bottom: 15px;
+  font-size: 1.8em;
+}
+
+.stock-details p {
+  margin-bottom: 10px;
+  font-size: 1.1em;
+  color: #444;
+}
+
+.stock-details .price {
+  font-weight: bold;
+  color: #007bff;
+  font-size: 1.2em;
+}
+
+.stock-details .positive {
+  color: #28a745; /* Green for positive change */
+  font-weight: bold;
+}
+
+.stock-details .negative {
+  color: #dc3545; /* Red for negative change */
+  font-weight: bold;
+}
+
+.select-prompt {
+  color: #777;
+  font-style: italic;
+  margin-top: 30px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+  .page-content {
+    padding: 20px 15px;
+  }
+
+  .page-content h1 {
+    font-size: 2em;
+  }
+}
