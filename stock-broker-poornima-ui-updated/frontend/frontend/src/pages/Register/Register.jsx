@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import "./Register.css";
 
-function Register({ onRegister }) {
+function Register({ setIsAuthenticated }) {
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -15,6 +15,7 @@ function Register({ onRegister }) {
     address: "",
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -25,8 +26,9 @@ function Register({ onRegister }) {
   const validatePhone = (phone) => /^\d{10}$/.test(phone);
   const validatePostalCode = (address) => /\b\d{6}\b/.test(address);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
     if (
       !form.username ||
       !form.password ||
@@ -54,10 +56,31 @@ function Register({ onRegister }) {
       setError("Address must include a valid 6 digit postal code.");
       return;
     }
-    // Remove rePassword before saving
+    setLoading(true);
     const { rePassword, ...userData } = form;
-    onRegister(userData);
-    navigate("/home");
+    try {
+      // Call backend register endpoint
+      const response = await fetch("http://localhost:8080/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(userData)
+      });
+      if (!response.ok) {
+        const data = await response.json().catch(() => ({}));
+        throw new Error(data.message || "Registration failed.");
+      }
+      // Registration successful, redirect to /home
+      setIsAuthenticated(true);
+      setTimeout(() => {
+        navigate("/login");
+      }, 100);
+      // For debugging
+      // console.log('Registration successful, navigating to /home');
+    } catch (err) {
+      setError(err.message || "Registration failed.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -115,7 +138,7 @@ function Register({ onRegister }) {
             required
           />
           {error && <p className="error">{error}</p>}
-          <button type="submit">Register</button>
+          <button type="submit" disabled={loading}>{loading ? "Registering..." : "Register"}</button>
         </form>
       </div>
     </div>

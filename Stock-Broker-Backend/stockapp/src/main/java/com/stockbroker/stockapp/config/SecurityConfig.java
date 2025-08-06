@@ -16,14 +16,16 @@ public class SecurityConfig {
 
 	//Allow public access to /auth/* endpoints
 	@Bean
-	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
-		http.csrf().disable() // Disable CSRF for simplicity
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+		http
+			.csrf(csrf -> csrf.disable())
 			.authorizeHttpRequests(auth -> auth
 					.requestMatchers("/auth/**").permitAll() // open access
 					.anyRequest().authenticated()// Secure other endpoints
 					
-			);
-		return null;
-			
+			)
+			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+		return http.build();
+
 }
 }

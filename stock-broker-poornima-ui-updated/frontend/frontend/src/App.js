@@ -84,11 +84,11 @@ function App() {
           <Route path="/" element={<Welcome />} />
           <Route
             path="/login"
-            element={<Login onLogin={handleLogin} />}
+            element={<Login setIsAuthenticated={setIsAuthenticated} />}
           />
           <Route
             path="/register"
-            element={<Register onRegister={handleRegister} />}
+            element={<Register setIsAuthenticated={setIsAuthenticated} />}
           />
           <Route
             path="/home"

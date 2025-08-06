@@ -5,22 +5,49 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../components/Navbar";
 import "./Login.css";
 
-function Login({ onLogin }) {
+function Login({ setIsAuthenticated }) {
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
 
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const success = onLogin(form);
-    if (success) {
-      navigate("/home");
-    } else {
-      setError("Invalid username or password.");
+    setError("");
+    setLoading(true);
+    const formData = new FormData(e.target);
+    const submittedForm = {
+      username: formData.get("username") || "",
+      password: formData.get("password") || ""
+    };
+    setForm(submittedForm);
+    try {
+      // Call backend login endpoint
+      const response = await fetch("http://localhost:8080/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(submittedForm)
+      });
+      if (!response.ok) {
+        throw new Error("Invalid username or password.");
+      }
+      // Parse response and handle token or user data if needed
+      const data = await response.json().catch(() => ({}));
+      // Optionally store token: localStorage.setItem('token', data.token);
+      if (data && (data.success || data.token)) {
+        setIsAuthenticated(true);
+        navigate("/home");
+      } else {
+        // If backend does not return a success flag, still navigate on 200
+        setIsAuthenticated(true);
+        navigate("/home");
+      }
+    } catch (err) {
+      setError(err.message || "Login failed.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -38,20 +65,16 @@ function Login({ onLogin }) {
             type="text"
             name="username"
             placeholder="Username"
-            value={form.username}
-            onChange={handleChange}
             required
           />
           <input
             type="password"
             name="password"
             placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
             required
           />
           {error && <p className="error">{error}</p>}
-          <button type="submit">Login</button>
+          <button type="submit" disabled={loading}>{loading ? "Logging in..." : "Login"}</button>
         </form>
         <div className="register-link">
           <span>Not a member?</span>
