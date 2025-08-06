@@ -1,0 +1,132 @@
+.fund-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #f4f7f6;
+}
+
+.page-content {
+  flex-grow: 1;
+  padding: 40px 20px;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.page-content h1 {
+  color: #007bff;
+  margin-bottom: 15px;
+  font-size: 2.5em;
+}
+
+.page-content p {
+  font-size: 1.1em;
+  color: #555;
+  margin-bottom: 30px;
+}
+
+.current-balance {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.current-balance h2 {
+  color: #333;
+  font-size: 2em;
+  margin: 0;
+}
+
+.balance-amount {
+  color: #28a745; /* Green for balance */
+  font-weight: bold;
+}
+
+.fund-actions-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-bottom: 30px;
+}
+
+.deposit-section,
+.withdraw-section {
+  background-color: white;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+.deposit-section h3,
+.withdraw-section h3 {
+  color: #007bff;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+}
+
+.fund-actions-grid .form-group {
+  margin-bottom: 20px;
+}
+
+.fund-actions-grid label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #555;
+}
+
+.fund-actions-grid input[type="number"] {
+  width: calc(100% - 20px);
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.deposit-section button {
+  background-color: #28a745; /* Green for deposit */
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1em;
+}
+
+.deposit-section button:hover {
+  background-color: #218838;
+}
+
+.withdraw-section .withdraw-button {
+  background-color: #dc3545; /* Red for withdraw */
+  width: 100%;
+  padding: 12px;
+  font-size: 1.1em;
+}
+
+.withdraw-section .withdraw-button:hover {
+  background-color: #c82333;
+}
+
+.fund-message {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #007bff; /* Blue for general messages */
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .page-content {
+    padding: 20px 15px;
+  }
+
+  .page-content h1 {
+    font-size: 2em;
+  }
+
+  .fund-actions-grid {
+    grid-template-columns: 1fr; /* Stack sections on small screens */
+  }
+}

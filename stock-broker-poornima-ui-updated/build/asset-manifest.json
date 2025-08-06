@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/stock-broker/static/css/main.1c2adcb1.css",
+    "main.js": "/stock-broker/static/js/main.82ecf82e.js",
+    "index.html": "/stock-broker/index.html",
+    "main.1c2adcb1.css.map": "/stock-broker/static/css/main.1c2adcb1.css.map",
+    "main.82ecf82e.js.map": "/stock-broker/static/js/main.82ecf82e.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1c2adcb1.css",
+    "static/js/main.82ecf82e.js"
+  ]
+}
