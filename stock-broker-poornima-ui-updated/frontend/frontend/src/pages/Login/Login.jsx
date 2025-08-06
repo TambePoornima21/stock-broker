@@ -25,6 +25,7 @@ function Login({ setIsAuthenticated }) {
     setForm(submittedForm);
     try {
       // Call backend login endpoint
+      //Added API URL here
       const response = await fetch("http://localhost:8080/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
