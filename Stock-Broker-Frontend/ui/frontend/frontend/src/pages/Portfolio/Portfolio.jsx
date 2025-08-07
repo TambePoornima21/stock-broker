@@ -1,103 +1,74 @@
 "use client";
-
+import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
-import "./Portfolio.css";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import "./Profile.css";
 
-// Example stock prices for current and previous day
-const STOCK_PRICES = {
-  AAPL: { current: 170.25, prev: 168.75 },
-  GOOGL: { current: 155.8, prev: 156.55 },
-  MSFT: { current: 420.1, prev: 418.0 },
-  AMZN: { current: 185.5, prev: 184.6 },
-  TSLA: { current: 175.0, prev: 178.2 },
-};
+function Profile({ onLogout }) {
+  const navigate = useNavigate();
+  const [user, setUser] = useState(null);
 
-function Portfolio({ portfolio, orders }) {
-  // Calculate total invested amount (sum of all buy orders)
-  let totalValue = 0;
-  let totalCurrentValue = 0;
-  let totalPrevValue = 0;
+  const userId = localStorage.getItem("userId"); // or get it from props/context
 
-  Object.entries(portfolio).forEach(([symbol, qty]) => {
-    const priceObj = STOCK_PRICES[symbol];
-    if (!priceObj) return;
-    totalCurrentValue += qty * priceObj.current;
-    totalPrevValue += qty * priceObj.prev;
-  });
+  useEffect(() => {
+    if (!userId) return;
 
-  orders.forEach((order) => {
-    if (order.type === "Buy") {
-      totalValue += order.price * order.quantity;
-    } else if (order.type === "Sell") {
-      totalValue -= order.price * order.quantity;
-    }
-  });
+    axios
+      .get(`http://localhost:8084/profile/${userId}`)
+      .then((res) => {
+        setUser(res.data);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch user profile", err);
+      });
+  }, [userId]);
 
-  const totalReturns = totalCurrentValue - totalValue;
-  const oneDayReturns = totalCurrentValue - totalPrevValue;
+  const handleLogout = () => {
+    onLogout();
+    localStorage.removeItem("userId"); // optional
+    navigate("/welcome"); // Or '/login'
+  };
+
+  if (!user) return <p>Loading profile...</p>;
 
   return (
-    <div className="portfolio-page">
+    <div className="profile-page">
       <Navbar />
       <div className="page-content">
-        <h1>Portfolio</h1>
-        <div className="portfolio-summary">
-          <h2>Summary</h2>
-          <p>
-            <strong>Total Invested:</strong>{" "}
-            <span className="total-invested">${totalValue.toFixed(2)}</span>
-          </p>
-          <p>
-            <strong>Current Value:</strong>{" "}
-            <span className="total-value">${totalCurrentValue.toFixed(2)}</span>
-          </p>
-          <p>
-            <strong>One Day Returns:</strong>{" "}
-            <span className={oneDayReturns >= 0 ? "positive" : "negative"}>
-              ${oneDayReturns.toFixed(2)}
+        <h1>My Profile</h1>
+        <p>View and manage your personal information.</p>
+
+        <div className="profile-details card">
+          <div className="profile-item">
+            <span className="label">Name:</span>
+            <span className="value">{user.username}</span>
+          </div>
+          <div className="profile-item">
+            <span className="label">Email:</span>
+            <span className="value">{user.email}</span>
+          </div>
+          <div className="profile-item">
+            <span className="label">Phone:</span>
+            <span className="value">{user.phone || "N/A"}</span>
+          </div>
+          <div className="profile-item">
+            <span className="label">Address:</span>
+            <span className="value">{user.address || "N/A"}</span>
+          </div>
+          <div className="profile-item">
+            <span className="label">Member Since:</span>
+            <span className="value">
+              {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "N/A"}
             </span>
-          </p>
-          <p>
-            <strong>Total Returns:</strong>{" "}
-            <span className={totalReturns >= 0 ? "positive" : "negative"}>
-              ${totalReturns.toFixed(2)}
-            </span>
-          </p>
-        </div>
-        <div className="owned-stocks-table-container">
-          <h2>Current Holdings</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>Stock</th>
-                <th>Quantity</th>
-                <th>Current Price</th>
-                <th>Current Value</th>
-              </tr>
-            </thead>
-            <tbody>
-              {Object.entries(portfolio).length === 0 ? (
-                <tr>
-                  <td colSpan={4} className="no-stocks">No holdings yet.</td>
-                </tr>
-              ) : (
-                Object.entries(portfolio).map(([symbol, qty]) => (
-                  <tr key={symbol}>
-                    <td>{symbol}</td>
-                    <td>{qty}</td>
-                    <td>${STOCK_PRICES[symbol]?.current.toFixed(2) || "N/A"}</td>
-                    <td>
-                      ${STOCK_PRICES[symbol] ? (qty * STOCK_PRICES[symbol].current).toFixed(2) : "N/A"}
-                    </td>
-                  </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+          </div>
+          <button onClick={handleLogout} className="logout-button">
+            Logout
+          </button>
         </div>
       </div>
     </div>
   );
 }
 
-export default Portfolio;
+export default Profile;

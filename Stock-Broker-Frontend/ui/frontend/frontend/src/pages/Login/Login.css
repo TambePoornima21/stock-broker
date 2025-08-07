@@ -1,59 +1,81 @@
-.login-page {
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  background: #f7f9fa;
+  background-color: #f0f2f5; /* Light grey background */
 }
 
-.page-content {
+.login-card {
+  background-color: white;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
   max-width: 400px;
-  margin: 40px auto;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  padding: 32px;
   text-align: center;
 }
 
-.login-form input {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 18px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+.login-card h2 {
+  margin-bottom: 30px;
+  color: #333;
+  font-size: 2em;
+}
+
+.login-card .form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.login-card label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #555;
+}
+
+.login-card input[type="email"],
+.login-card input[type="password"] {
+  width: calc(100% - 20px); /* Account for padding */
+  padding: 12px 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
   font-size: 1em;
 }
 
-.login-form button {
+.login-card button {
   width: 100%;
   padding: 12px;
-  background: #007bff;
-  color: #fff;
+  background-color: #007bff;
+  color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   font-size: 1.1em;
-  font-weight: bold;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-.login-form .error {
-  color: #dc3545;
-  margin-bottom: 12px;
+.login-card button:hover {
+  background-color: #0056b3;
 }
 
-.register-link {
-  margin-top: 18px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
+.login-card .register-link {
+  margin-top: 20px;
+  font-size: 0.9em;
+  color: #666;
 }
 
-.register-link button {
-  background: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 20px;
-  font-size: 1em;
-  cursor: pointer;
-  font-weight: bold;
+.login-card .register-link a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.login-card .register-link a:hover {
+  text-decoration: underline;
+}
+
+.error-message {
+  color: #dc3545; /* Red for error messages */
+  margin-bottom: 15px;
+  font-size: 0.9em;
 }
