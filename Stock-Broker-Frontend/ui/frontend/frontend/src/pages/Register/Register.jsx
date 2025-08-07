@@ -1,152 +1,142 @@
-// src/pages/Register.jsx
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom"; // Correct import for CRA routing
-import "./Register.css"; // Import the CSS file for this component
+"use client";
 
-// You might have a Navbar component, if so, uncomment and adjust path:
-// import Navbar from "../components/Navbar"; 
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import "./Register.css";
 
-export default function Register({ onRegister }) {
-  const [form, setForm] = useState({
-    username: "",
-    password: "",
-    rePassword: "",
-    email: "",
-    phone: "",
-    address: "",
-  });
+function Register({ onRegister }) {
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [message, setMessage] = useState("");
+
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
-
-  const validateEmail = (email) => email.endsWith("@gmail.com");
-  const validatePhone = (phone) => /^\d{10}$/.test(phone);
-  const validatePostalCode = (address) => /\b\d{6}\b/.test(address);
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setError(""); // Clear previous errors
+    setError("");
+    setMessage("");
 
-    if (
-      !form.username ||
-      !form.password ||
-      !form.rePassword ||
-      !form.email ||
-      !form.phone ||
-      !form.address
-    ) {
-      setError("All fields are required.");
-      return;
-    }
-    if (form.password !== form.rePassword) {
+    if (password !== confirmPassword) {
       setError("Passwords do not match.");
       return;
     }
-    if (!validateEmail(form.email)) {
-      setError("Email must end with @gmail.com.");
-      return;
-    }
-    if (!validatePhone(form.phone)) {
-      setError("Phone must be exactly 10 digits.");
-      return;
-    }
-    if (!validatePostalCode(form.address)) {
-      setError("Address must include a valid 6 digit postal code.");
-      return;
-    }
 
-    // Remove rePassword before saving
-    const { rePassword, ...userData } = form;
-    onRegister?.(userData); // Call the optional onRegister prop
-    navigate("/home"); // Navigate using react-router-dom
+    const userData = {
+      username,
+      email,
+      phone,
+      address,
+      password,
+    };
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8084/auth/register",
+        userData
+      );
+
+      setMessage(response.data); // "User registered successfully!"
+      onRegister();              // Notify parent
+      navigate("/home");         // Redirect
+    } catch (error) {
+      console.error("Registration failed:", error);
+      if (error.response?.data?.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    }
   };
 
   return (
-    <div className="register-page">
-      {/* Uncomment and ensure your Navbar component is correctly imported */}
-      {/* <Navbar /> */} 
-      <div className="page-content">
-        <h1>Register</h1>
-        <form className="register-form" onSubmit={handleSubmit}>
+    <div className="register-container">
+      <div className="register-card">
+        <h2>Register</h2>
+        <form onSubmit={handleSubmit}>
           <div className="form-group">
             <label htmlFor="username">Username:</label>
             <input
               type="text"
               id="username"
-              name="username"
-              placeholder="Username"
-              value={form.username}
-              onChange={handleChange}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="email">Email:</label>
             <input
               type="email"
               id="email"
-              name="email"
-              placeholder="Email"
-              value={form.email}
-              onChange={handleChange}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
           </div>
+
+          <div className="form-group">
+            <label htmlFor="phone">Phone Number:</label>
+            <input
+              type="tel"
+              id="phone"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="address">Address:</label>
+            <input
+              type="text"
+              id="address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              required
+            />
+          </div>
+
           <div className="form-group">
             <label htmlFor="password">Password:</label>
             <input
               type="password"
               id="password"
-              name="password"
-              placeholder="Password"
-              value={form.password}
-              onChange={handleChange}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
+
           <div className="form-group">
-            <label htmlFor="rePassword">Confirm Password:</label>
+            <label htmlFor="confirmPassword">Confirm Password:</label>
             <input
               type="password"
-              id="rePassword"
-              name="rePassword"
-              placeholder="Re-enter Password"
-              value={form.rePassword}
-              onChange={handleChange}
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
           </div>
-          <div className="form-group">
-            <label htmlFor="phone">Phone:</label>
-            <input
-              type="text"
-              id="phone"
-              name="phone"
-              placeholder="Phone"
-              value={form.phone}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="address">Address (include 6 digit postal code):</label>
-            <input
-              type="text"
-              id="address"
-              name="address"
-              placeholder="Address (include 6 digit postal code)"
-              value={form.address}
-              onChange={handleChange}
-              required
-            />
-          </div>
+
           {error && <p className="error-message">{error}</p>}
-          <button type="submit" className="register-button">Register</button>
+          {message && <p className="success-message">{message}</p>}
+
+          <button type="submit">Register</button>
         </form>
+
+        <p className="login-link">
+          Already have an account? <Link to="/login">Login</Link>
+        </p>
       </div>
     </div>
   );
 }
+
+export default Register;

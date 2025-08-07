@@ -1,75 +1,78 @@
-/* src/pages/Register.css */
-.register-page {
+.register-container {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   min-height: 100vh;
-  background-color: #f0f2f5; /* Light grey background */
+  background-color: #f7f9fa;
   font-family: Arial, sans-serif;
 }
 
-.page-content {
-  flex-grow: 1;
+.register-card {
+  background-color: #ffffff;
+  padding: 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px; /* slightly increased width for better fit */
+  box-sizing: border-box;
+}
+
+.register-card h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  font-size: 1.8em;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 18px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 20px;
 }
 
-.register-form {
-  background-color: #ffffff; /* White card background */
-  padding: 40px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 100%;
-  max-width: 400px; /* Max width for the form card */
-  display: flex;
-  flex-direction: column;
-  gap: 15px; /* Space between form elements */
-}
-
-.page-content h2 { /* Targeting the h2 in page-content */
-  font-size: 2em;
-  margin-bottom: 20px;
+.form-group label {
+  align-self: flex-start;
+  margin-bottom: 6px;
+  font-weight: bold;
   color: #333;
-  text-align: center;
 }
 
-.register-form input[type="text"],
-.register-form input[type="password"],
-.register-form input[type="email"] {
-  width: 100%;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.form-group input {
+  padding: 12px 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   font-size: 1em;
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  width: 95%; /* made wider */
+  box-sizing: border-box;
 }
 
-.register-form input::placeholder {
-  color: #aaa;
-}
-
-.register-form button[type="submit"] {
+button[type="submit"] {
   width: 100%;
   padding: 12px;
-  background-color: #28a745; /* Green button */
+  background-color: #007bff;
   color: white;
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 1.1em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin-top: 10px; /* Space above the button */
+  font-weight: bold;
 }
 
-.register-form button[type="submit"]:hover {
-  background-color: #218838; /* Darker green on hover */
+button[type="submit"]:hover {
+  background-color: #0056b3;
 }
 
-.register-form .error { /* Targeting the error class in your JSX */
-  color: #dc3545; /* Red for error messages */
-  font-size: 0.9em;
+.error-message {
+  color: #dc3545;
+  font-size: 0.95em;
   text-align: center;
-  margin-top: 10px;
+  margin-bottom: 12px;
+}
+
+.success-message {
+  color: #28a745;
+  font-size: 0.95em;
+  text-align: center;
+  margin-bottom: 12px;
 }

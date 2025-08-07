@@ -1,9 +1,25 @@
 "use client";
 
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from "../../components/Navbar";
 import "./Orders.css";
 
-function Orders({ orders }) {
+function Orders() {
+  const [orders, setOrders] = useState([]);
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    if (userId) {
+      axios
+        .get(`http://localhost:8084/transactions/${userId}`)
+        .then((response) => setOrders(response.data))
+        .catch((error) =>
+          console.error("❌ Error fetching orders:", error)
+        );
+    }
+  }, [userId]);
+
   return (
     <div className="orders-page">
       <Navbar />
@@ -28,15 +44,15 @@ function Orders({ orders }) {
                   <tr
                     key={order.id}
                     className={
-                      order.type === "Buy" ? "buy-order" : "sell-order"
+                      order.status === "SUCCESS" ? "buy-order" : "sell-order"
                     }
                   >
                     <td>{order.id}</td>
-                    <td>{order.type}</td>
-                    <td>{order.stock}</td>
+                    <td>{order.status}</td>
+                    <td>{order.stockSymbol}</td>
                     <td>{order.quantity}</td>
-                    <td>${order.price.toFixed(2)}</td>
-                    <td>{order.date}</td>
+                    <td>${order.price?.toFixed(2)}</td>
+                    <td>{order.timestamp?.split("T")[0]}</td>
                   </tr>
                 ))}
               </tbody>

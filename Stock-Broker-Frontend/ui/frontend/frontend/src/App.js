@@ -21,7 +21,7 @@ import "./App.css";
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState(null); // {username, email, phone, address, memberSince, password}
-  const [orders, setOrders] = useState([]);
+  const [orders, setOrders] = useState([]); // ✅ FIXED HERE
   const [balance, setBalance] = useState(5000.0);
   const [portfolio, setPortfolio] = useState({}); // {symbol: quantity}
 

@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Navbar from "../../components/Navbar";
+import axios from "axios";
 import "./Portfolio.css";
 
-// Example stock prices for current and previous day
+// Mock stock prices for now (ideally fetched from API)
 const STOCK_PRICES = {
   AAPL: { current: 170.25, prev: 168.75 },
   GOOGL: { current: 155.8, prev: 156.55 },
@@ -12,8 +14,38 @@ const STOCK_PRICES = {
   TSLA: { current: 175.0, prev: 178.2 },
 };
 
-function Portfolio({ portfolio, orders }) {
-  // Calculate total invested amount (sum of all buy orders)
+function Portfolio() {
+  const [portfolio, setPortfolio] = useState({});
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const userId = localStorage.getItem("userId");
+
+  useEffect(() => {
+    if (!userId) return;
+
+    const fetchData = async () => {
+      try {
+        const [portfolioRes, ordersRes] = await Promise.all([
+          axios.get(`http://localhost:8084/portfolio/${userId}`),
+          axios.get(`http://localhost:8084/transactions/${userId}`)
+        ]);
+        setPortfolio(portfolioRes.data);  // should be an object like { AAPL: 5, TSLA: 2 }
+        setOrders(ordersRes.data);        // should be an array of orders
+      } catch (err) {
+        console.error("Failed to load portfolio/orders", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [userId]);
+
+  // Loading state
+  if (loading) return <p>Loading portfolio...</p>;
+
+  // Calculations
   let totalValue = 0;
   let totalCurrentValue = 0;
   let totalPrevValue = 0;
@@ -64,6 +96,7 @@ function Portfolio({ portfolio, orders }) {
             </span>
           </p>
         </div>
+
         <div className="owned-stocks-table-container">
           <h2>Current Holdings</h2>
           <table>
