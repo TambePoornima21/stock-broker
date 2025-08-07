@@ -1,5 +1,5 @@
 "use client";
-
+import './axiosConfig';
 import React, { useState } from "react";
 import {
   BrowserRouter as Router,

@@ -1,40 +1,72 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import Navbar from "../../components/Navbar";
 import "./Stocks.css";
 
-function Stocks({ addOrder, balance, portfolio }) {
+function Stocks({ userId }) {
   const [selectedStock, setSelectedStock] = useState("");
   const [quantity, setQuantity] = useState(1);
+  const [balance, setBalance] = useState(0);
+  const [portfolio, setPortfolio] = useState({});
+  const [stocks, setStocks] = useState([]);
 
-  const stocks = [
-    { symbol: "AAPL", name: "Apple Inc.", price: 170.25, change: "+1.50" },
-    { symbol: "GOOGL", name: "Alphabet Inc. (Class A)", price: 155.8, change: "-0.75" },
-    { symbol: "MSFT", name: "Microsoft Corp.", price: 420.1, change: "+2.10" },
-    { symbol: "AMZN", name: "Amazon.com Inc.", price: 185.5, change: "+0.90" },
-    { symbol: "TSLA", name: "Tesla Inc.", price: 175.0, change: "-3.20" },
-  ];
+  useEffect(() => {
+    // Fetch stock list
+    axios.get("http://localhost:8084/stocks")
+      .then(res => setStocks(res.data))
+      .catch(err => console.error("Error fetching stocks:", err));
+
+    // Fetch user balance
+    axios.get(`http://localhost:8084/funds/balance/${userId}`)
+      .then(res => setBalance(res.data))
+      .catch(err => console.error("Error fetching balance:", err));
+
+    // Fetch user portfolio
+    axios.get(`http://localhost:8084/portfolio/${userId}`)
+      .then(res => {
+        const portfolioMap = {};
+        res.data.forEach(item => {
+          portfolioMap[item.stockSymbol] = item.quantity;
+        });
+        setPortfolio(portfolioMap);
+      })
+      .catch(err => console.error("Error fetching portfolio:", err));
+  }, [userId]);
 
   const handleStockChange = (e) => setSelectedStock(e.target.value);
   const handleQuantityChange = (e) => setQuantity(Number(e.target.value));
-
   const displayStock = stocks.find((stock) => stock.symbol === selectedStock);
 
   const handleBuy = (stock) => {
-    if (stock.price * quantity > balance) {
+    const totalPrice = stock.price * quantity;
+    if (totalPrice > balance) {
       alert("Insufficient funds!");
       return;
     }
-    addOrder({
-      type: "Buy",
-      stock: stock.symbol,
-      name: stock.name,
-      quantity,
-      price: stock.price,
-      date: new Date().toLocaleDateString(),
-    });
-    alert(`Bought ${quantity} shares of ${stock.symbol}`);
+
+    axios.post("http://localhost:8084/stocks/buy", null, {
+      params: {
+        userId,
+        symbol: stock.symbol,
+        stockName: stock.name,
+        quantity,
+        price: stock.price,
+      },
+    })
+      .then(() => {
+        alert(`Bought ${quantity} shares of ${stock.symbol}`);
+        setBalance(prev => prev - totalPrice);
+        setPortfolio(prev => ({
+          ...prev,
+          [stock.symbol]: (prev[stock.symbol] || 0) + quantity
+        }));
+      })
+      .catch(err => {
+        alert("Purchase failed.");
+        console.error(err);
+      });
   };
 
   const handleSell = (stock) => {
@@ -43,15 +75,14 @@ function Stocks({ addOrder, balance, portfolio }) {
       alert("You don't own enough shares to sell!");
       return;
     }
-    addOrder({
-      type: "Sell",
-      stock: stock.symbol,
-      name: stock.name,
-      quantity,
-      price: stock.price,
-      date: new Date().toLocaleDateString(),
-    });
+
+    // Simulate API call for selling, if implemented in backend
     alert(`Sold ${quantity} shares of ${stock.symbol}`);
+    setPortfolio(prev => ({
+      ...prev,
+      [stock.symbol]: prev[stock.symbol] - quantity
+    }));
+    setBalance(prev => prev + quantity * stock.price);
   };
 
   return (
@@ -81,18 +112,7 @@ function Stocks({ addOrder, balance, portfolio }) {
               {displayStock.name} ({displayStock.symbol})
             </h3>
             <p>
-              Current Price:{" "}
-              <span className="price">${displayStock.price.toFixed(2)}</span>
-            </p>
-            <p>
-              Change:{" "}
-              <span
-                className={
-                  displayStock.change.startsWith("+") ? "positive" : "negative"
-                }
-              >
-                {displayStock.change}
-              </span>
+              Current Price: <span className="price">${displayStock.price.toFixed(2)}</span>
             </p>
             <div style={{ marginBottom: "16px" }}>
               <label htmlFor="quantity-input">Quantity:&nbsp;</label>
@@ -122,3 +142,4 @@ function Stocks({ addOrder, balance, portfolio }) {
 }
 
 export default Stocks;
+
