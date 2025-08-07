@@ -1,13 +1,15 @@
 {
   "files": {
-    "main.css": "/stock-broker/static/css/main.1c2adcb1.css",
-    "main.js": "/stock-broker/static/js/main.82ecf82e.js",
+    "main.css": "/stock-broker/static/css/main.deb2854c.css",
+    "main.js": "/stock-broker/static/js/main.ef3d1cdc.js",
+    "static/js/488.426f7942.chunk.js": "/stock-broker/static/js/488.426f7942.chunk.js",
     "index.html": "/stock-broker/index.html",
-    "main.1c2adcb1.css.map": "/stock-broker/static/css/main.1c2adcb1.css.map",
-    "main.82ecf82e.js.map": "/stock-broker/static/js/main.82ecf82e.js.map"
+    "main.deb2854c.css.map": "/stock-broker/static/css/main.deb2854c.css.map",
+    "main.ef3d1cdc.js.map": "/stock-broker/static/js/main.ef3d1cdc.js.map",
+    "488.426f7942.chunk.js.map": "/stock-broker/static/js/488.426f7942.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.1c2adcb1.css",
-    "static/js/main.82ecf82e.js"
+    "static/css/main.deb2854c.css",
+    "static/js/main.ef3d1cdc.js"
   ]
 }
