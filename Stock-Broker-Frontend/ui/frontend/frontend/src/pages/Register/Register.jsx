@@ -1,11 +1,12 @@
-"use client";
+// src/pages/Register.jsx
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom"; // Correct import for CRA routing
+import "./Register.css"; // Import the CSS file for this component
 
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Navbar from "../../components/Navbar";
-import "./Register.css";
+// You might have a Navbar component, if so, uncomment and adjust path:
+// import Navbar from "../components/Navbar"; 
 
-function Register({ onRegister }) {
+export default function Register({ onRegister }) {
   const [form, setForm] = useState({
     username: "",
     password: "",
@@ -27,6 +28,8 @@ function Register({ onRegister }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
+
     if (
       !form.username ||
       !form.password ||
@@ -54,72 +57,96 @@ function Register({ onRegister }) {
       setError("Address must include a valid 6 digit postal code.");
       return;
     }
+
     // Remove rePassword before saving
     const { rePassword, ...userData } = form;
-    onRegister(userData);
-    navigate("/home");
+    onRegister?.(userData); // Call the optional onRegister prop
+    navigate("/home"); // Navigate using react-router-dom
   };
 
   return (
     <div className="register-page">
-      <Navbar />
+      {/* Uncomment and ensure your Navbar component is correctly imported */}
+      {/* <Navbar /> */} 
       <div className="page-content">
         <h1>Register</h1>
         <form className="register-form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="username"
-            placeholder="Username"
-            value={form.username}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="password"
-            name="rePassword"
-            placeholder="Re-enter Password"
-            value={form.rePassword}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="phone"
-            placeholder="Phone"
-            value={form.phone}
-            onChange={handleChange}
-            required
-          />
-          <input
-            type="text"
-            name="address"
-            placeholder="Address (include 6 digit postal code)"
-            value={form.address}
-            onChange={handleChange}
-            required
-          />
-          {error && <p className="error">{error}</p>}
-          <button type="submit">Register</button>
+          <div className="form-group">
+            <label htmlFor="username">Username:</label>
+            <input
+              type="text"
+              id="username"
+              name="username"
+              placeholder="Username"
+              value={form.username}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="email">Email:</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="password">Password:</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="rePassword">Confirm Password:</label>
+            <input
+              type="password"
+              id="rePassword"
+              name="rePassword"
+              placeholder="Re-enter Password"
+              value={form.rePassword}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="phone">Phone:</label>
+            <input
+              type="text"
+              id="phone"
+              name="phone"
+              placeholder="Phone"
+              value={form.phone}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="address">Address (include 6 digit postal code):</label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              placeholder="Address (include 6 digit postal code)"
+              value={form.address}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          {error && <p className="error-message">{error}</p>}
+          <button type="submit" className="register-button">Register</button>
         </form>
       </div>
     </div>
   );
 }
-
-export default Register;
